@@ -80,7 +80,7 @@
 
 
 ### Testing (Using VTOP for sole purpose)
-1 -[ ] Login with your vtop in Incognito, now use theft session cookie.
+1 - [ ] Login with your vtop in Incognito, now use theft session cookie.
 
 
 #### Idea Extention
