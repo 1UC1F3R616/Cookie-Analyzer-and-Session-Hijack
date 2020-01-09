@@ -72,3 +72,16 @@
 
 
 #### [References and Help Guide](https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/tree/master/refrences)
+
+
+
+#### Incognito Issue
+
+
+
+### Testing (Using VTOP for sole purpose)
+1 -[ ] Login with your vtop in Incognito, now use theft session cookie.
+
+
+#### Idea Extention
+- [ ] Our Malware will never let user login in any website which uses cookie by Replacing the cookie with garbage.
