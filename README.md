@@ -58,4 +58,4 @@
 - [ ] Extend Support for *Sweet Ransomware*
 
 
-#### [References](https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/tree/master/refrences)
+#### [References and Help Guide](https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/tree/master/refrences)
