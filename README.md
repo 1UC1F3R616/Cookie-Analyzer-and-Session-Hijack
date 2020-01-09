@@ -43,7 +43,18 @@
 
 ## Basic Taks
 - [ ] Extend support for *Glitch-the-STD-IN-OUT*</br>
-- [ ] .
+- [ ] session key
+- [ ] csrf
+- [ ] token
+- [ ] specific search
+- [ ] websites visited-> .com, .net etc to identify
+- [ ] login token etc
+- [ ] session id
+- [ ] a user guide for noobs to how to use
+- [ ] [must](https://www.optimizesmart.com/google-analytics-cookies-ultimate-guide/)
+- [x] a brief directory about the different types of cookies, keep it short and precise.
+- [ ] [our cokkie analyzer will have this analysis avail](https://stackoverflow.com/questions/4349147/python-create-cookies-and-then-load-a-page-with-the-cookies)
+
 
 </br></br>
 
