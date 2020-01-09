@@ -1,5 +1,7 @@
 ![cookielock](https://user-images.githubusercontent.com/41824020/72046625-d40d6e80-32de-11ea-9618-9030debeea46.jpg)
 
+[![HitCount](http://hits.dwyl.io/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack.svg)](http://hits.dwyl.io/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack)
+
 </br>
 
 # This Project is Divided into two Main Projects
