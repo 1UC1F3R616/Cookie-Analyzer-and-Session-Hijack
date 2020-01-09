@@ -36,7 +36,23 @@
 
 <h3>Project devlopment directions</h3>
 
-
 > ♘ Scripts</br>
 > ♘ OKOK</br>
 > ♘ flana dikda oooooooooooooooooooooooooooooooooo_____________oooooooooooooooooooo
+
+
+## Basic Taks
+- [ ] Extend support for *Glitch-the-STD-IN-OUT*</br>
+- [ ] .
+
+</br></br>
+
+### How to Spread it?
+* Review my Django Project, :)  i.e Package Distribution
+* Sir, My project... have a look. Can I change my attendence?
+* You click something happens something blaaah
+* Keep it simple, More curious you are More you fall the prey. Be lazy dear
+* My Grammerly giving emoji of 'Kya bak*hodi h ye'
+
+### How to make it Persistant?
+- [ ] Extend Support for *Sweet Ransomware*
