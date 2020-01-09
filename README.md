@@ -56,3 +56,6 @@
 
 ### How to make it Persistant?
 - [ ] Extend Support for *Sweet Ransomware*
+
+
+#### [References](https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/tree/master/refrences)
