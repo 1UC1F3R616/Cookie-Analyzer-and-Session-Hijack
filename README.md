@@ -80,8 +80,9 @@
 
 
 ### Testing (Using VTOP for sole purpose)
-1 - [ ] Login with your vtop in Incognito, now use theft session cookie.
+> 1 
+- [ ] Login with your vtop in Incognito, now use theft session cookie.
 
 
 #### Idea Extention
-- [ ] Our Malware will never let user login in any website which uses cookie by Replacing the cookie with garbage.
+- [ ] Our Malware will never let user login in any website which uses session cookies by Replacing the session cookies with garbage.
