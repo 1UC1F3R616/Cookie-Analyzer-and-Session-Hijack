@@ -56,6 +56,7 @@
 - [ ] [must](https://www.optimizesmart.com/google-analytics-cookies-ultimate-guide/)
 - [x] a brief directory about the different types of cookies, keep it short and precise.
 - [ ] [our cokkie analyzer will have this analysis avail](https://stackoverflow.com/questions/4349147/python-create-cookies-and-then-load-a-page-with-the-cookies)
+- [ ] Injector and Spreader
 
 
 </br></br>
