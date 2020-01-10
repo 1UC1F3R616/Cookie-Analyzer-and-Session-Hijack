@@ -65,7 +65,7 @@
 * Sir, My project... have a look. Can I change my attendence?
 * You click something happens something blaaah
 * Keep it simple, More curious you are More you fall the prey. Be lazy dear
-* My Grammerly giving emoji of 'Kya bak*hodi h ye'
+
 
 ### How to make it Persistant?
 - [ ] Extend Support for *Sweet Ransomware*
