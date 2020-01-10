@@ -6,7 +6,7 @@
 
 # This Project is Divided into two Main Projects
 * Cookie Hack and Session Hijack
-* Cookie Analyzer
+* Cookie Analyzer - *A tool to find sensitive Keys and Passwords in your cache*
 
 </br>
 
