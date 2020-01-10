@@ -45,13 +45,11 @@
 
 ## Basic Taks
 - [ ] Extend support for *Glitch-the-STD-IN-OUT*</br>
-- [ ] session key
 - [x] csrf
 - [x] token
 - [x] specific search
 - [x] websites visited-> .com, .net etc to identify
-- [ ] login token etc
-- [ ] session id
+- [x] session Id
 - [x] a user guide for noobs to how to use
 - [ ] [must](https://www.optimizesmart.com/google-analytics-cookies-ultimate-guide/)
 - [x] a brief directory about the different types of cookies, keep it short and precise.
