@@ -105,4 +105,3 @@ if __name__ == '__main__':
 # ------------------------
 # inject script
 # inject in django projects
-# remember dependency
