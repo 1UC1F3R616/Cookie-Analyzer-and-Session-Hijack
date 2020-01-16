@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'CookieAnalysis',
   packages = ['CookieAnalysis'],
-  version = '0.1',
+  version = '0.1.1',
   license='MIT',
   description = 'Analyizer and a possible exploiter for sessions tokens etc',
   author = 'D-E-F-E-A-T',
