@@ -7,14 +7,14 @@ setup(
   description = 'Analyizer and a possible exploiter for sessions tokens etc',
   author = 'D-E-F-E-A-T',
   author_email = 'pchackers18@gmail.com',
-  url = 'https://github.com/D-E-F-E-A-T/', #c
-  download_url = 'https://github.com/D-E-F-E-A-T/Selenium-Cookie-Injector/archive/v_01.tar.gz', #c
+  url = 'https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/',
+  download_url = 'https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/archive/v_01.tar.gz',
   keywords = ['SESSION', 'COOKIE', 'TOKENS', 'CSRF'],
   install_requires=[
 		'pyaes','pbkdf2','keyring','lz4', 'configparser'
       ],
   classifiers=[
-    'Development Status :: 4 - Beta', #c
+    'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
     'Topic :: Software Development :: Build Tools',
     'License :: OSI Approved :: MIT License',
