@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
+try:
+	import wrapper as browser_m
+except:
+	from CookieAnalysis import wrapper as browser_m
 
-import wrapper as browser_m
 
 import requests
 import sys
