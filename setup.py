@@ -8,7 +8,7 @@ setup(
   author = 'D-E-F-E-A-T',
   author_email = 'pchackers18@gmail.com',
   url = 'https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/',
-  download_url = 'https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/archive/v_01.tar.gz',
+  download_url = 'https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/archive/v_01.1.tar.gz',
   keywords = ['SESSION', 'COOKIE', 'TOKENS', 'CSRF'],
   install_requires=[
 		'pyaes','pbkdf2','keyring','lz4', 'configparser', 'requests'
