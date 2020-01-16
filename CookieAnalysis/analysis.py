@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-import browser_m
+import wrapper as browser_m
 
 import requests
 import sys

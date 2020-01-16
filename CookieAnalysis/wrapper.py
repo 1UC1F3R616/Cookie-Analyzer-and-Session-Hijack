@@ -16,8 +16,7 @@ try:
 except ImportError:
     import simplejson as json
 try:
-    # should use pysqlite2 to read the cookies.sqlite on Windows
-    # otherwise will raise the "sqlite3.DatabaseError: file is encrypted or is not a database" exception
+
     from pysqlite2 import dbapi2 as sqlite3
 except ImportError:
     import sqlite3
@@ -27,7 +26,7 @@ import keyring
 import pyaes
 from pbkdf2 import PBKDF2
 
-__doc__ = 'Load browser cookies into a cookiejar'
+__doc__ = 'Loads browser cookies into a cookiejar'
 
 
 class BrowserCookieError(Exception):
@@ -35,13 +34,9 @@ class BrowserCookieError(Exception):
 
 
 def create_local_copy(cookie_file):
-    """Make a local copy of the sqlite cookie database and return the new filename.
-    This is necessary in case this database is still being written to while the user browses
-    to avoid sqlite locking errors.
-    """
-    # check if cookie file exists
+
     if os.path.exists(cookie_file):
-        # copy to random name in tmp folder
+
         tmp_cookie_file = tempfile.NamedTemporaryFile(suffix='.sqlite').name
         open(tmp_cookie_file, 'wb').write(open(cookie_file, 'rb').read())
         return tmp_cookie_file
@@ -50,7 +45,7 @@ def create_local_copy(cookie_file):
 
 
 def windows_group_policy_path():
-    # we know that we're running under windows at this point so it's safe to do these imports
+
     from winreg import ConnectRegistry, HKEY_LOCAL_MACHINE, OpenKeyEx, QueryValueEx, REG_EXPAND_SZ, REG_SZ
     try:
         root = ConnectRegistry(None, HKEY_LOCAL_MACHINE)
@@ -69,7 +64,7 @@ def windows_group_policy_path():
 def crypt_unprotect_data(
         cipher_text=b'', entropy=b'', reserved=None, prompt_struct=None
 ):
-    # we know that we're running under windows at this point so it's safe to try these imports
+
     import ctypes
     import ctypes.wintypes
 
@@ -88,8 +83,10 @@ def crypt_unprotect_data(
     CRYPTPROTECT_UI_FORBIDDEN = 0x01
 
     if not ctypes.windll.crypt32.CryptUnprotectData(
-            ctypes.byref(blob_in), ctypes.byref(desc), ctypes.byref(blob_entropy),
-            reserved, prompt_struct, CRYPTPROTECT_UI_FORBIDDEN, ctypes.byref(blob_out)
+            ctypes.byref(blob_in), ctypes.byref(
+                desc), ctypes.byref(blob_entropy),
+            reserved, prompt_struct, CRYPTPROTECT_UI_FORBIDDEN, ctypes.byref(
+                blob_out)
     ):
         raise RuntimeError('Failed to decrypt the cipher text with DPAPI')
 
@@ -105,36 +102,38 @@ class Chrome:
         self.salt = b'saltysalt'
         self.iv = b' ' * 16
         self.length = 16
-        # domain name to filter cookies by
+
         self.domain_name = domain_name
         if sys.platform == 'darwin':
-            # running Chrome on OSX
-            my_pass = keyring.get_password('Chrome Safe Storage', 'Chrome').encode('utf8')  # get key from keyring
-            iterations = 1003  # number of pbkdf2 iterations on mac
-            self.key = PBKDF2(my_pass, self.salt, iterations=iterations).read(self.length)
+
+            my_pass = keyring.get_password('Chrome Safe Storage', 'Chrome').encode(
+                'utf8')  # get key from keyring
+            iterations = 1003
+            self.key = PBKDF2(my_pass, self.salt,
+                              iterations=iterations).read(self.length)
             cookie_file = cookie_file \
                 or os.path.expanduser('~/Library/Application Support/Google/Chrome/Default/Cookies')
 
         elif sys.platform.startswith('linux'):
-            # running Chrome on Linux
-            my_pass = 'peanuts'.encode('utf8')  # chrome linux is encrypted with the key peanuts
+
+            my_pass = 'peanuts'.encode('utf8')
             iterations = 1
-            self.key = PBKDF2(my_pass, self.salt, iterations=iterations).read(self.length)
+            self.key = PBKDF2(my_pass, self.salt,
+                              iterations=iterations).read(self.length)
             cookie_file = cookie_file \
                 or os.path.expanduser('~/.config/google-chrome/Default/Cookies') \
                 or os.path.expanduser('~/.config/chromium/Default/Cookies') \
                 or os.path.expanduser('~/.config/google-chrome-beta/Default/Cookies')
         elif sys.platform == "win32":
-            # get cookie file from APPDATA
-            # Note: in windows the \\ is required before a u to stop unicode errors
+
             cookie_file = cookie_file or windows_group_policy_path() \
                 or glob.glob(os.path.join(os.getenv('APPDATA', ''), '..\Local\\Google\\Chrome\\User Data\\Default\\Cookies')) \
                 or glob.glob(os.path.join(os.getenv('LOCALAPPDATA', ''), 'Google\\Chrome\\User Data\\Default\\Cookies')) \
                 or glob.glob(os.path.join(os.getenv('APPDATA', ''), 'Google\\Chrome\\User Data\\Default\\Cookies'))
         else:
-            raise BrowserCookieError("OS not recognized. Works on Chrome for OSX, Windows, and Linux.")
+            raise BrowserCookieError(
+                "OS not recognized. Works on Chrome for OSX, Windows, and Linux.")
 
-        # if the type of cookie_file is list, use the first element in the list
         if isinstance(cookie_file, list):
             if not cookie_file:
                 raise BrowserCookieError('Failed to find Chrome cookie')
@@ -143,8 +142,8 @@ class Chrome:
         self.tmp_cookie_file = create_local_copy(cookie_file)
 
     def __del__(self):
-        # remove temporary backup of sqlite cookie database
-        if hasattr(self, 'tmp_cookie_file'):  # if there was an error till here
+
+        if hasattr(self, 'tmp_cookie_file'):
             os.remove(self.tmp_cookie_file)
 
     def __str__(self):
@@ -156,20 +155,17 @@ class Chrome:
         con = sqlite3.connect(self.tmp_cookie_file)
         cur = con.cursor()
         try:
-            # chrome <=55
             cur.execute('SELECT host_key, path, secure, expires_utc, name, value, encrypted_value '
                         'FROM cookies WHERE host_key like "%{}%";'.format(self.domain_name))
         except sqlite3.OperationalError:
-            # chrome >=56
             cur.execute('SELECT host_key, path, is_secure, expires_utc, name, value, encrypted_value '
                         'FROM cookies WHERE host_key like "%{}%";'.format(self.domain_name))
 
         cj = http.cookiejar.CookieJar()
-        epoch_start = datetime.datetime(1601,1,1)
+        epoch_start = datetime.datetime(1601, 1, 1)
         for item in cur.fetchall():
             host, path, secure, expires, name = item[:5]
             if item[3] != 0:
-                # ensure dates don't exceed the datetime limit of year 10000
                 offset = min(int(item[3]), 265000000000000000)
                 delta = datetime.timedelta(microseconds=offset)
                 expires = epoch_start + delta
@@ -203,12 +199,11 @@ class Chrome:
         if value or (encrypted_value[:3] != b'v10'):
             return value
 
-        # Encrypted cookies should be prefixed with 'v10' according to the
-        # Chromium code. Strip it off.
         encrypted_value = encrypted_value[3:]
         encrypted_value_half_len = int(len(encrypted_value) / 2)
 
-        cipher = pyaes.Decrypter(pyaes.AESModeOfOperationCBC(self.key, self.iv))
+        cipher = pyaes.Decrypter(
+            pyaes.AESModeOfOperationCBC(self.key, self.iv))
         decrypted = cipher.feed(encrypted_value[:encrypted_value_half_len])
         decrypted += cipher.feed(encrypted_value[encrypted_value_half_len:])
         decrypted += cipher.feed()
@@ -220,20 +215,21 @@ class Firefox:
         self.tmp_cookie_file = None
         cookie_file = cookie_file or self.find_cookie_file()
         self.tmp_cookie_file = create_local_copy(cookie_file)
-        # current sessions are saved in sessionstore.js
-        self.session_file = os.path.join(os.path.dirname(cookie_file), 'sessionstore.js')
-        self.session_file_lz4 = os.path.join(os.path.dirname(cookie_file), 'sessionstore-backups', 'recovery.jsonlz4')
-        # domain name to filter cookies by
+
+        self.session_file = os.path.join(
+            os.path.dirname(cookie_file), 'sessionstore.js')
+        self.session_file_lz4 = os.path.join(os.path.dirname(
+            cookie_file), 'sessionstore-backups', 'recovery.jsonlz4')
+
         self.domain_name = domain_name
 
     def __del__(self):
-        # remove temporary backup of sqlite cookie database
+
         if self.tmp_cookie_file:
             os.remove(self.tmp_cookie_file)
 
     def __str__(self):
         return 'firefox'
-
 
     def get_default_profile(self, profiles_ini_path, template_for_relative):
         """ Given the path to firefox profiles.ini,
@@ -251,34 +247,39 @@ class Firefox:
 
     def find_cookie_file(self):
         if sys.platform == 'darwin':
-            profiles_ini_paths = glob.glob(os.path.expanduser('~/Library/Application Support/Firefox/profiles.ini'))
-            profiles_ini_path = self.get_default_profile(profiles_ini_paths, os.path.expanduser('~/Library/Application Support/Firefox/Profiles/{0}/cookies.sqlite'.format(profiles_ini_path)))
+            profiles_ini_paths = glob.glob(os.path.expanduser(
+                '~/Library/Application Support/Firefox/profiles.ini'))
+            profiles_ini_path = self.get_default_profile(profiles_ini_paths, os.path.expanduser(
+                '~/Library/Application Support/Firefox/Profiles/{0}/cookies.sqlite'.format(profiles_ini_path)))
             cookie_files = glob.glob(
                 os.path.expanduser('~/Library/Application Support/Firefox/Profiles/*default/cookies.sqlite')) \
                 or glob.glob(profiles_ini_path)
         elif sys.platform.startswith('linux'):
-            profiles_ini_paths = glob.glob(os.path.expanduser('~/.mozilla/firefox/profiles.ini'))
-            profiles_ini_path = self.get_default_profile(profiles_ini_paths, os.path.expanduser('~/.mozilla/firefox/{0}/cookies.sqlite'))
+            profiles_ini_paths = glob.glob(
+                os.path.expanduser('~/.mozilla/firefox/profiles.ini'))
+            profiles_ini_path = self.get_default_profile(
+                profiles_ini_paths, os.path.expanduser('~/.mozilla/firefox/{0}/cookies.sqlite'))
             cookie_files = glob.glob(os.path.expanduser('~/.mozilla/firefox/*default*/cookies.sqlite')) \
-            or glob.glob(profiles_ini_path)
+                or glob.glob(profiles_ini_path)
         elif sys.platform == 'win32':
             profiles_ini_paths = glob.glob(os.path.join(os.environ.get('APPDATA', ''),
-                                                    'Mozilla/Firefox/profiles.ini')) \
-                                    or glob.glob(os.path.join(os.environ.get('LOCALAPPDATA', ''),
-                                                    'Mozilla/Firefox/profiles.ini'))
+                                                        'Mozilla/Firefox/profiles.ini')) \
+                or glob.glob(os.path.join(os.environ.get('LOCALAPPDATA', ''),
+                                          'Mozilla/Firefox/profiles.ini'))
             profiles_ini_path = self.get_default_profile(profiles_ini_paths, os.path.join(os.environ.get('APPDATA', ''),
-                                                    "Mozilla/Firefox/{0}/cookies.sqlite"))
-            cookie_files = glob.glob(os.path.join(os.environ.get('PROGRAMFILES', ''), 
-                                                    'Mozilla Firefox/profile/cookies.sqlite')) \
-                            or glob.glob(os.path.join(os.environ.get('PROGRAMFILES(X86)', ''),
-                                                    'Mozilla Firefox/profile/cookies.sqlite')) \
-                            or glob.glob(os.path.join(os.environ.get('APPDATA', ''),
-                                                    'Mozilla/Firefox/Profiles/*default*/cookies.sqlite')) \
-                            or glob.glob(os.path.join(os.environ.get('LOCALAPPDATA', ''),
-                                                    'Mozilla/Firefox/Profiles/*default*/cookies.sqlite')) \
-                            or glob.glob(profiles_ini_path)
+                                                                                          "Mozilla/Firefox/{0}/cookies.sqlite"))
+            cookie_files = glob.glob(os.path.join(os.environ.get('PROGRAMFILES', ''),
+                                                  'Mozilla Firefox/profile/cookies.sqlite')) \
+                or glob.glob(os.path.join(os.environ.get('PROGRAMFILES(X86)', ''),
+                                          'Mozilla Firefox/profile/cookies.sqlite')) \
+                or glob.glob(os.path.join(os.environ.get('APPDATA', ''),
+                                          'Mozilla/Firefox/Profiles/*default*/cookies.sqlite')) \
+                or glob.glob(os.path.join(os.environ.get('LOCALAPPDATA', ''),
+                                          'Mozilla/Firefox/Profiles/*default*/cookies.sqlite')) \
+                or glob.glob(profiles_ini_path)
         else:
-            raise BrowserCookieError('Unsupported operating system: ' + sys.platform)
+            raise BrowserCookieError(
+                'Unsupported operating system: ' + sys.platform)
         if cookie_files:
             return cookie_files[0]
         else:
@@ -294,7 +295,8 @@ class Firefox:
         if not os.path.exists(self.session_file):
             return
         try:
-            json_data = json.loads(open(self.session_file, 'rb').read().decode())
+            json_data = json.loads(
+                open(self.session_file, 'rb').read().decode())
         except ValueError as e:
             print('Error parsing firefox session JSON:', str(e))
         else:
@@ -332,7 +334,6 @@ class Firefox:
 
         return cj
 
-
 def create_cookie(host, path, secure, expires, name, value):
     """Shortcut function to create a cookie
     """
@@ -369,5 +370,5 @@ def load(domain_name=""):
 
 
 if __name__ == '__main__':
-    print(load())
+    pass
 
