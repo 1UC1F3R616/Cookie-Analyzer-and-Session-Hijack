@@ -7,7 +7,7 @@
 
 # This Project is Divided into two Main Projects
 * Cookie Hack and Session Hijack
-* Cookie Analyzer - *A tool to find sensitive Keys and Passwords in your cache*
+* Cookie Analyzer - *A tool to find sensitive Keys and Passwords in your cookies*
 
 </br>
 
@@ -72,7 +72,7 @@
 - [ ] Extend Support for *Sweet Ransomware*
 
 
-#### [References and Help Guide](https://github.com/D-E-F-E-A-T/Cookie-Analyzer-and-Session-Hijack/tree/master/refrences)
+#### [References and Help Guide](https://github.com/1UC1F3R616/Cookie-Analyzer-and-Session-Hijack/tree/master/refrences)
 
 
 
